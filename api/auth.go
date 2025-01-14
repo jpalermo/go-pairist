@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/pkg/errors"
 	identitytoolkit "google.golang.org/api/identitytoolkit/v3"
 	"google.golang.org/api/option"
@@ -39,7 +39,7 @@ func (a *Auth) IDToken() (string, error) {
 
 		a.idToken = resp.IdToken
 
-		var claims jwt.StandardClaims
+		var claims jwt.RegisteredClaims
 		parser := &jwt.Parser{}
 
 		_, _, err = parser.ParseUnverified(a.idToken, &claims)
@@ -47,7 +47,7 @@ func (a *Auth) IDToken() (string, error) {
 			return "", errors.Wrap(err, "parsing auth token")
 		}
 
-		a.refreshAfter = time.Unix(claims.ExpiresAt, 0).Add(-5 * time.Minute)
+		a.refreshAfter = claims.ExpiresAt.Add(-5 * time.Minute)
 	}
 
 	return a.idToken, nil
