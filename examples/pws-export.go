@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/dpb587/go-pairist/api"
+	"github.com/dpb587/go-pairist/v2/api"
 )
 
 func main() {
